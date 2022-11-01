@@ -106,7 +106,7 @@ def create_tunnel(index):
 
 def git_commit():
     with open('README.md', 'w') as file:
-        file.write(str(final_readme_data))
+        file.write(final_readme_data)
     system('git add .')
     system(f'git commit -m "{ctime()}"')
     system('git push')
@@ -118,8 +118,5 @@ for index in tunnels_to_be_made:
     url = create_tunnel(index)
     key = tunnels_to_be_made[index]['key']
     final_readme_data = final_readme_data.replace(f"REPLACE {key}", url)
-    Thread(target=git_commit).start()
     free_yml(lock_string)
-
-
-
+git_commit()
