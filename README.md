@@ -1,5 +1,5 @@
 
 # Minecraft Server IPs
 
-</br>Main Survival: `tcp://0.tcp.in.ngrok.io:13634`
-</br>Main Creative: `tcp://0.tcp.in.ngrok.io:12432`
+</br>Main Survival: `0.tcp.in.ngrok.io:15952`
+</br>Main Creative: `0.tcp.in.ngrok.io:18408`

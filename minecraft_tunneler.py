@@ -115,8 +115,10 @@ def git_commit():
 config_location = check_ngrok_yml_location()
 for index in tunnels_to_be_made:
     lock_string = check_and_lock_yml()
-    url = create_tunnel(index)
+    url = create_tunnel(index).replace("tcp://","")
     key = tunnels_to_be_made[index]['key']
     final_readme_data = final_readme_data.replace(f"REPLACE {key}", url)
     free_yml(lock_string)
 git_commit()
+
+
