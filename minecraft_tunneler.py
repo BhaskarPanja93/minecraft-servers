@@ -129,6 +129,7 @@ def check_and_commit():
             url = tunnels_to_be_made[index]['address']
             readme_ip_data = readme_ip_data.replace(f"REPLACE {key}", url)
         with open('README.md', 'w') as file:
+            print(readme_ip_data)
             file.write(readme_ip_data)
         system('git add .')
         system(f'git commit -m "{ctime()}"')
@@ -144,6 +145,7 @@ def check_and_commit():
                 tunnels_to_be_made[index]['status'] = "Unavailable"  ## red circle
             readme_local_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
         with open('README.md', 'w') as file:
+            print(readme_local_connectivity_data)
             file.write(readme_local_connectivity_data)
         system('git add .')
         system(f'git commit -m "{ctime()}"')
@@ -159,6 +161,7 @@ def check_and_commit():
                 tunnels_to_be_made[index]['status'] = "Available Globally"  ## green circle
             readme_global_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
         with open('README.md', 'w') as file:
+            print(readme_global_connectivity_data)
             file.write(readme_global_connectivity_data)
         system('git add .')
         system(f'git commit -m "{ctime()}"')
