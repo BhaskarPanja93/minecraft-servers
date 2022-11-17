@@ -139,6 +139,7 @@ def check_and_commit():
         for index in tunnels_to_be_made:
             key = tunnels_to_be_made[index]['key']
             latency = check_server_connection(tunnels_to_be_made[index]['port'])
+            readme_local_connectivity_data = readme_local_connectivity_data.replace(f"REPLACE TIME {key}", ctime())
             if latency >= 0:
                 if tunnels_to_be_made[index]['status'] not in ["Available Globally", "Available Locally"]:
                     tunnels_to_be_made[index]['status'] = "Available Locally" ## yellow circle
@@ -158,6 +159,7 @@ def check_and_commit():
             ip, port = tunnels_to_be_made[index]['address'].split(":")
             port = int(port)
             latency = check_server_connection(port, ip)
+            readme_global_connectivity_data = readme_global_connectivity_data.replace(f"REPLACE TIME {key}", ctime())
             if latency >= 0:
                 if tunnels_to_be_made[index]['status'] != "Available Globally":
                     tunnels_to_be_made[index]['status'] = "Available Globally"  ## green circle
