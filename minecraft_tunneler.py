@@ -81,10 +81,10 @@ def check_ngrok_yml_location():
 
 def check_and_lock_yml():
     string = str(randrange(1, 10000))
-    for _ in range(5):
+    for _ in range(50):
         try:
             open(config_location.replace("ngrok.yml", "ngrok.yml.lock"),'r')
-            sleep(1)
+            sleep(0.1)
         except:
             break
     open(config_location.replace("ngrok.yml", "ngrok.yml.lock"), 'w').write(string)
@@ -174,7 +174,7 @@ def check_and_commit():
 config_location = check_ngrok_yml_location()
 for index in tunnels_to_be_made:
     while not type(ping('8.8.8.8')) == float:
-        sleep(1)
+        sleep(0.1)
     lock_string = check_and_lock_yml()
     url = create_tunnel(index).replace("tcp://","")
     key = tunnels_to_be_made[index]['key']
