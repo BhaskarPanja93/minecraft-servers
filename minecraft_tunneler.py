@@ -2,14 +2,19 @@
 from random import randrange
 from threading import Thread
 from time import sleep, ctime
+
+from ping3 import ping
 from requests import get
 from os import system as system_caller, remove, system
-
+import minestat
 
 ## all tunnels to be made along with their name in dictionary, port, other details
 tunnels_to_be_made = {
 1: {
 "key":"Main Survival",
+"status": "",
+"port":'50000',
+"address": "",
 "config":"""
 version: "2"
 region: in
@@ -19,7 +24,7 @@ inspect_db_size: -1
 log_level: crit
 tunnels:
     main_survival:
-        addr: 50000
+        addr: REPLACE Port
         inspect: false
         proto: tcp
 """},
@@ -27,6 +32,9 @@ tunnels:
 
 2: {
 "key": "Main Creative",
+"status": "",
+"port":'50001',
+"address": "",
 "config": """
 version: "2"
 region: in
@@ -36,18 +44,27 @@ inspect_db_size: -1
 log_level: crit
 tunnels:
     main_creative:
-        addr: 50001
+        addr: REPLACE Port
         inspect: false
         proto: tcp
 """}
 }
 
-final_readme_data = """
+readme_template = """
 # Minecraft Server IPs
 
-</br>Main Survival: `REPLACE Main Survival`
-</br>Main Creative: `REPLACE Main Creative`
+</br></br>Main Survival: `REPLACE Main Survival` </br> Status: `REPLACE STATUS Main Survival` </br> Last Checked: REPLACE TIME Main Survival
+</br></br>Main Creative: `REPLACE Main Creative` </br> Status: `REPLACE STATUS Main Creative` </br> Last Checked: REPLACE TIME Main Survival
 """
+
+
+def check_server_connection(port, ip='127.0.0.1'):
+    ms = minestat.MineStat(ip, int(port))
+    if ms.online:
+        return ms.latency
+    else:
+        return -1
+
 
 def check_ngrok_yml_location():
     default_locations = [
@@ -85,9 +102,9 @@ def free_yml(string):
 def create_tunnel(index):
     url = ''
     while True:
-        inspect_port = randrange(51000, 52000)
+        inspect_port = randrange(51000, 53000)
         with open(config_location, 'w') as file:
-            file.write(tunnels_to_be_made[index]['config'].replace("INSPECT_PORT", str(inspect_port)))
+            file.write(tunnels_to_be_made[index]['config'].replace("INSPECT_PORT", str(inspect_port)).replace("REPLACE Port", tunnels_to_be_made[index]['port']))
         Thread(target=system_caller, args=("ngrok start --all",)).start()
         for _ in range(100):
             xml_data = eval(get(f"http://127.0.0.1:{inspect_port}/api/tunnels").text.replace("false", "False").replace("true", "True"))
@@ -104,21 +121,59 @@ def create_tunnel(index):
     return url
 
 
-def git_commit():
-    with open('README.md', 'w') as file:
-        file.write(final_readme_data)
-    system('git add .')
-    system(f'git commit -m "{ctime()}"')
-    system('git push')
+def check_and_commit():
+    while True:
+        readme_ip_data = readme_template
+        for index in tunnels_to_be_made:
+            key = tunnels_to_be_made[index]['key']
+            url = tunnels_to_be_made[index]['address']
+            readme_ip_data = readme_ip_data.replace(f"REPLACE {key}", url)
+        with open('README.md', 'w') as file:
+            file.write(readme_ip_data)
+        system('git add .')
+        system(f'git commit -m "{ctime()}"')
+        system('git push')
+
+        ## Check local availability
+        readme_local_connectivity_data = readme_ip_data
+        for index in tunnels_to_be_made:
+            key = tunnels_to_be_made[index]['key']
+            if check_server_connection(tunnels_to_be_made[index]['port']) >= 0:
+                tunnels_to_be_made[index]['status'] = "Available Locally" ## yellow circle
+            else:
+                tunnels_to_be_made[index]['status'] = "Unavailable"  ## red circle
+            readme_local_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
+        with open('README.md', 'w') as file:
+            file.write(readme_local_connectivity_data)
+        system('git add .')
+        system(f'git commit -m "{ctime()}"')
+        system('git push')
+
+        ## Check global availability
+        readme_global_connectivity_data = readme_ip_data
+        for index in tunnels_to_be_made:
+            key = tunnels_to_be_made[index]['key']
+            ip, port = tunnels_to_be_made[index]['address'].split(":")
+            port = int(port)
+            if check_server_connection(port, ip) >= 0:
+                tunnels_to_be_made[index]['status'] = "Available Globally"  ## green circle
+            readme_global_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
+        with open('README.md', 'w') as file:
+            file.write(readme_global_connectivity_data)
+        system('git add .')
+        system(f'git commit -m "{ctime()}"')
+        system('git push')
+        sleep(10)
 
 
 config_location = check_ngrok_yml_location()
 for index in tunnels_to_be_made:
+    while not type(ping('8.8.8.8')) == float:
+        sleep(1)
     lock_string = check_and_lock_yml()
     url = create_tunnel(index).replace("tcp://","")
     key = tunnels_to_be_made[index]['key']
-    final_readme_data = final_readme_data.replace(f"REPLACE {key}", url)
+    tunnels_to_be_made[index]['address'] = url
     free_yml(lock_string)
-git_commit()
-
-
+ip_change_time = ctime()
+check_and_commit()
