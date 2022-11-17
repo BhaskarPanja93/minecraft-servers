@@ -139,7 +139,9 @@ def check_and_commit():
         readme_local_connectivity_data = readme_ip_data
         for index in tunnels_to_be_made:
             key = tunnels_to_be_made[index]['key']
-            if check_server_connection(tunnels_to_be_made[index]['port']) >= 0:
+            latency = check_server_connection(tunnels_to_be_made[index]['port'])
+            print(f"---------- local {latency}------------------")
+            if latency >= 0:
                 tunnels_to_be_made[index]['status'] = "Available Locally" ## yellow circle
             else:
                 tunnels_to_be_made[index]['status'] = "Unavailable"  ## red circle
@@ -157,7 +159,9 @@ def check_and_commit():
             key = tunnels_to_be_made[index]['key']
             ip, port = tunnels_to_be_made[index]['address'].split(":")
             port = int(port)
-            if check_server_connection(port, ip) >= 0:
+            latency = check_server_connection(port, ip)
+            print(f"------------ global {latency}------------------")
+            if latency >= 0:
                 tunnels_to_be_made[index]['status'] = "Available Globally"  ## green circle
             readme_global_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
         with open('README.md', 'w') as file:
