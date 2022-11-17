@@ -140,14 +140,12 @@ def check_and_commit():
         for index in tunnels_to_be_made:
             key = tunnels_to_be_made[index]['key']
             latency = check_server_connection(tunnels_to_be_made[index]['port'])
-            print(f"---------- local {latency}------------------")
             if latency >= 0:
                 tunnels_to_be_made[index]['status'] = "Available Locally" ## yellow circle
             else:
                 tunnels_to_be_made[index]['status'] = "Unavailable"  ## red circle
-            readme_local_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
+            readme_local_connectivity_data = readme_local_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
         with open('README.md', 'w') as file:
-            print(readme_local_connectivity_data)
             file.write(readme_local_connectivity_data)
         system('git add .')
         system(f'git commit -m "{ctime()}"')
@@ -160,12 +158,10 @@ def check_and_commit():
             ip, port = tunnels_to_be_made[index]['address'].split(":")
             port = int(port)
             latency = check_server_connection(port, ip)
-            print(f"------------ global {latency}------------------")
             if latency >= 0:
                 tunnels_to_be_made[index]['status'] = "Available Globally"  ## green circle
-            readme_global_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
+            readme_global_connectivity_data = readme_global_connectivity_data.replace(f"REPLACE STATUS {key}", tunnels_to_be_made[index]['status'])
         with open('README.md', 'w') as file:
-            print(readme_global_connectivity_data)
             file.write(readme_global_connectivity_data)
         system('git add .')
         system(f'git commit -m "{ctime()}"')
