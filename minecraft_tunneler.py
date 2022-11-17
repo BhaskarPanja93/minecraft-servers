@@ -53,8 +53,8 @@ tunnels:
 readme_template = """
 # Minecraft Server IPs
 
-</br></br>Main Survival: `REPLACE Main Survival` </br> Status: `REPLACE STATUS Main Survival` </br> Last Checked: REPLACE TIME Main Survival
-</br></br>Main Creative: `REPLACE Main Creative` </br> Status: `REPLACE STATUS Main Creative` </br> Last Checked: REPLACE TIME Main Survival
+</br><h1>Main Survival:</h1>IP: `REPLACE Main Survival` </br> Status: `REPLACE STATUS Main Survival` </br> Last Checked: REPLACE TIME Main Survival
+</br><h1>Main Creative:</h1>IP: `REPLACE Main Creative` </br> Status: `REPLACE STATUS Main Creative` </br> Last Checked: REPLACE TIME Main Survival
 """
 
 
