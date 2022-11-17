@@ -122,19 +122,18 @@ def create_tunnel(index):
 
 
 def check_and_commit():
+    readme_ip_data = readme_template
+    for index in tunnels_to_be_made:
+        key = tunnels_to_be_made[index]['key']
+        url = tunnels_to_be_made[index]['address']
+        readme_ip_data = readme_ip_data.replace(f"REPLACE {key}", url)
+    with open('README.md', 'w') as file:
+        file.write(readme_ip_data)
+    system('git add .')
+    system(f'git commit -m "{ctime()}"')
+    system('git push')
+    
     while True:
-        readme_ip_data = readme_template
-        for index in tunnels_to_be_made:
-            key = tunnels_to_be_made[index]['key']
-            url = tunnels_to_be_made[index]['address']
-            readme_ip_data = readme_ip_data.replace(f"REPLACE {key}", url)
-        with open('README.md', 'w') as file:
-            print(readme_ip_data)
-            file.write(readme_ip_data)
-        system('git add .')
-        system(f'git commit -m "{ctime()}"')
-        system('git push')
-
         ## Check local availability
         readme_local_connectivity_data = readme_ip_data
         for index in tunnels_to_be_made:
@@ -166,7 +165,6 @@ def check_and_commit():
         system('git add .')
         system(f'git commit -m "{ctime()}"')
         system('git push')
-        sleep(10)
 
 
 config_location = check_ngrok_yml_location()
