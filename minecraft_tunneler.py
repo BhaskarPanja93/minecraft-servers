@@ -130,6 +130,7 @@ def check_and_commit():
     with open('README.md', 'w') as file:
         file.write(readme_ip_data)
     system('git add .')
+    system('git reset -- minecraft_tunneler.py')
     system(f'git commit -m "{ctime()}"')
     system('git push')
 
@@ -149,6 +150,7 @@ def check_and_commit():
         with open('README.md', 'w') as file:
             file.write(readme_local_connectivity_data)
         system('git add .')
+        system('git reset -- minecraft_tunneler.py')
         system(f'git commit -m "{ctime()}"')
         system('git push')
 
@@ -167,6 +169,7 @@ def check_and_commit():
         with open('README.md', 'w') as file:
             file.write(readme_global_connectivity_data)
         system('git add .')
+        system('git reset -- minecraft_tunneler.py')
         system(f'git commit -m "{ctime()}"')
         system('git push')
 
