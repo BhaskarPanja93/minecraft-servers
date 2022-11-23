@@ -1,5 +1,5 @@
 
 # Minecraft Server IPs
 
-</br><h1>Main Survival:</h1>IP: `0.tcp.in.ngrok.io:16640` </br> Status: `Available Globally` </br> Last Checked: `Thu Nov 24 02:56:44 2022`
-</br><h1>Main Creative:</h1>IP: `0.tcp.in.ngrok.io:13528` </br> Status: `Available Globally` </br> Last Checked: `Thu Nov 24 02:56:44 2022`
+</br><h1>Main Survival:</h1>IP: `0.tcp.in.ngrok.io:16640` </br> Status: `Available Globally` </br> Last Checked: `Thu Nov 24 02:57:06 2022`
+</br><h1>Main Creative:</h1>IP: `0.tcp.in.ngrok.io:13528` </br> Status: `Available Globally` </br> Last Checked: `Thu Nov 24 02:57:06 2022`
